@@ -1,0 +1,14 @@
+POST http://localhost:2525/imposters
+Content-Type: application/json
+
+{
+    "name":"Ex4",
+    "port":4504,
+    "protocol":"http",
+    "stubs":[{
+        "responses":[
+            
+        ]
+    }]
+
+}
