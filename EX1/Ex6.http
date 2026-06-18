@@ -1,0 +1,86 @@
+POST http://localhost:2525/imposters
+Content-Type: application/json
+
+{
+   "name":"Ex6",
+   "port":4506,
+   "protocol":"http",
+   "stubs":[
+      {
+         "responses":[
+            {
+               "is":{
+                  "statuscode":200,
+                  "headers":{
+                     "Content-Type":"application/json"
+                  },
+                  "body":{
+                     "status":"Esta bem",
+                     "token":"Valido"
+                  }
+               }
+            }
+         ],
+         "predicates":[
+            {
+               "deepEquals":{
+                  "path":"/api/users",
+                  "method":"POST",
+                  "body":{
+                     "email":"exists@example.com",
+                     "email2":"exists@examplo.pt"
+                  }
+               }
+            }
+         ]
+      },
+      {
+         "responses":[
+            {
+               "is":{
+                  "statuscode":409,
+                  "headers":{
+                     "Content-Type":"application/json"
+                  },
+                  "body":{
+                     "status":"Nao esta bem",
+                     "token":"invalido"
+                  }
+               }
+            }
+         ],
+         "predicates":[
+            {
+               "deepEquals":{
+                  "path":"/api/users",
+                  "method":"POST",
+                  "body":{
+                     "email":"exists@example.com",
+                     "email2":"exists@example.com"
+                  }
+               }
+            }
+         ]
+      }
+   ]
+}
+
+###
+
+POST http://localhost:4506/api/users
+Content-Type: application/json
+
+{
+    "email":"exists@example.com",
+    "email2":"exists@examplo.pt"
+}
+
+###
+
+POST http://localhost:4506/api/users
+Content-Type: application/json
+
+{
+     "email":"exists@example.com",
+    "email2":"exists@example.com"
+}

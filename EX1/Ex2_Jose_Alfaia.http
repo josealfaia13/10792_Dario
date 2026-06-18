@@ -2,29 +2,27 @@ POST http://localhost:2525/imposters
 Content-Type: application/json
 
 {
-    "name":"Ex1",
-    "port":4551,
+    "name":"Ex2",
+    "port":4552,
     "protocol":"http",
-    "stubs": [{
+    "stubs":[{
         "responses":[
-            {"is": {"statuscode": 200,
-            "body":{
-                "Marca":[
-                    "Porche",
-                    "Fiat",
-                    "BWN",
-                    "Mercedes",
-                    "Dacia"]
-             }
+            {"is": {"statuscode":200,
+                    "body":{"Marca": "Toyota",
+                            "id":1,
+                            "preco":300                    }
                                     }}
         ],
         "predicates":[{
             "and":[
                 {
                     "equals":{
-                        "path":"/api/marcas",
+                        "path":"/api/cars",
                         "method":"GET",
-                        "headers": { "Content-Type": "application/json" }
+                        "headers": { "Content-Type": "application/json" },
+                        "query":{
+                            "Marca":"Toyota"
+                        }
                     }
                 },
                 {
@@ -35,12 +33,16 @@ Content-Type: application/json
                 }
             ]
 
-
         }]
     }]
 }
 
 ###
 
-GET http://localhost:4551/api/marcas
+GET http://localhost:4552/api/cars?Marca=Toyota
+Content-Type: application/json
+
+###
+
+DELETE http://localhost:2525/imposters/4552
 Content-Type: application/json

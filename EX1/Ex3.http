@@ -1,0 +1,80 @@
+POST http://localhost:2525/imposters
+Content-Type: application/json
+ 
+{
+    "name": "Ex3",
+    "port": 4503,
+    "protocol": "http",
+    "stubs": [{
+        "responses": [
+            {"is": { "statusCode": 200,
+                    "headers": { "Content-Type": "application/json" },
+                    "body": {
+                        "Marca": "Toyota",
+                        "carro": {
+                            "id": 1,
+                            "model": "Super",
+                            "Preco": 200
+                     }
+                  }
+               }
+            }
+         ],
+         "predicates": [
+            {
+               "equals": {
+                  "path": "/api/cars",
+                  "method": "GET",
+                  "query": {
+                    "Marca": "Toyota"
+                    }
+               }
+            },
+            {
+               "not": {
+                  "contains": { "body": "requiredField" },
+                  "caseSensitive": true
+               }
+            }
+         ]
+      },
+      {
+         "responses": [
+            {
+               "is": {
+                  "statusCode": 400,
+                  "headers": { "Content-Type": "application/json" },
+                  "body": {
+                     "carro": "não"
+                  }
+               }
+            }
+         ],
+         "predicates": [
+            {
+               "equals": {
+                  "path": "/api/cars",
+                  "method": "GET"
+               }
+            },
+            {
+               "not": {
+                  "contains": { "body": "requiredField" },
+                  "caseSensitive": true
+               }
+            }
+         ]
+      }
+   ]
+}
+ 
+###
+GET http://localhost:4503/api/cars?Marca=Toyota
+Content-Type: application/json
+ 
+{"optionalField": true}
+ 
+###
+GET http://localhost:4503/api/cars?cars=BMW
+Content-Type: application/json
+ 

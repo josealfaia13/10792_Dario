@@ -1,0 +1,82 @@
+POST http://localhost:2525/imposters
+Content-Type: application/json
+
+{
+    "name":"Ex5",
+    "port":4505,
+    "protocol":"http",
+    "stubs":[{
+         "responses":[
+            {"is":{"statuscode":200,
+                  "headers":{
+                     "Content-Type":"application/json"
+                  },
+                  "body":{
+                     "status":"Está bom",
+                     "token":"Valido"
+                  }
+               }
+            }
+         ],
+         "predicates":[{
+               "deepEquals":{
+                  "path":"/api/login",
+                  "method":"POST",
+                  "body":{
+                     "username":"user123",
+                     "password":"user123!"
+                  }
+               }
+            }
+         ]
+      },
+      {
+        "responses":[
+            {"is":{"statuscode":401,
+                "headres":{ "Content-Type": "application/json"},
+                "body":{"status":"Nao esta bem",
+                        "token":"Invaálido"
+                }
+            
+            }
+          }
+        ],
+        "predicates":[
+            {
+                "deepEquals":{
+                    "path":"/api/login",
+                    "method":"POST",
+                    "body":{
+                        "username":"osir143",
+                        "password":"osir143?"
+                    }
+
+                }
+            }
+           
+        ]
+
+      }
+
+   ]
+}
+
+###
+
+POST http://localhost:4505/api/login
+Content-Type: application/json
+
+{
+    "username":"osir143",
+    "password":"osir143?"
+}
+
+###
+
+POST http://localhost:4505/api/login
+Content-Type: application/json
+
+{
+     "username":"user123",
+     "password":"user123!"
+}

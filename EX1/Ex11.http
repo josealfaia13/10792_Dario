@@ -1,0 +1,51 @@
+POST http://localhost:2525/imposters
+content-Type: application/json
+
+{
+   "name":"Ex11",
+   "port":4511,
+   "protocol":"http",
+   "stubs":[{
+         "responses":[
+            {"is":{"statusCode": 201,
+                  "headers":{
+                     "Content-Type":"application/json",
+                     "Location":"/api/tasks/1"
+                  },
+                  "body":{
+                    "status": "criado",
+                    "1": {
+                        "title": "duplicate"
+                    }
+                  }
+               }
+            }
+         ],
+         "predicates":[
+            {
+               "equals":{
+                  "path":"/api/tasks",
+                  "method":"POST",
+                  "body":{
+                     "title": "duplicate"
+                  }
+               }
+            }
+         ]
+      }
+   ]
+}
+
+###
+
+POST http://localhost:4511/api/tasks
+Content-Type: application/json
+
+{
+"title": "duplicate"
+}
+
+###
+
+DELETE http://localhost:2525/imposters/4511
+Content-Type: application/json
